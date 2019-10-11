@@ -5,12 +5,12 @@ if($_SESSION['status'] != "login"){
     header("Location: index.php?pesan=belum_login");
 }
 
-$query = $db->query("SELECT m.id_verifikasi as id, u.nama_lengkap, r.kode_rfid, m.waktu_pemberian, m.waktu_penghentian, m.status_user FROM manajerial m INNER JOIN user u
+$query = $db->query("SELECT m.id_verifikasi as id, m.id_verifikasi as ver, u.nama_lengkap, r.kode_rfid, m.waktu_pemberian, m.waktu_penghentian, m.status_user FROM manajerial m INNER JOIN user u
                     ON m.id_user = u.id_user INNER JOIN rfid r ON m.kode_rfid = r.kode_rfid ORDER BY m.waktu_pemberian DESC");
 $_rfid = $db->query("SELECT * FROM rfid");
 $_user = $db->query("SELECT * FROM user");
 $kuota = $db->query("SELECT r.kode_rfid, r.status_kartu, COUNT(m.kode_rfid) AS kuota FROM rfid r LEFT JOIN manajerial m ON r.kode_rfid = m.kode_rfid GROUP BY kode_rfid");
-$track = $db->query("")
+
 ?>
 
 <!DOCTYPE html>
@@ -125,13 +125,12 @@ $track = $db->query("")
                             <th>Waktu Pemberian</th>
                             <th>Waktu Pemberhentian</th>
                             <th>Status</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php while($row = $query->fetch_assoc()) {?>
                         <tr>
-                            <td><button type="button" name="user" id="<?php echo $row['id']; ?>" class="btn btn-labeled btn-outline-primary btn-sm trc_user" data-toggle="modal" data-target="#track"><?php echo $row['nama_lengkap']; ?></button</td>
+                            <td><button type="button" data-toggle="modal" data-target="#user" name="user" id="<?php echo $row['id']; ?>" class="btn btn-labeled btn-link btn-sm tracking"><?php echo $row['nama_lengkap']; ?></button></td>
                             <td><?php echo $row['kode_rfid']; ?></td>
                             <td><?php echo $row['waktu_pemberian']; ?></td>
                             <td><?php if($row['waktu_penghentian'] == NULL): 
@@ -238,41 +237,40 @@ $track = $db->query("")
             </div>
         </div>
     </div>
-    
+</div>
     <div class="col-md-3">
-        <div class="modal-fade" id="track">
+        <div class="modal modal-fade" id="user">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="modal-title">User Tracking</h3>
+                        <h3 class="modal-title">Rekord Data User</h3>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
-                    
-                    <div class="modal-body">
-                        <table class="table table-stripped table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Nama User</th>
-                                    <th>Kode RFID</th>
-                                    <th>Waktu Masuk</th>
-                                    <th>Durasi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td name="user" id="user"></td>
-                                    <td name="rfid" id="rfid"></td>
-                                    <td name="masuk" id="masuk"></td>
-                                    <td name="durasi" id="durasi"></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="modal-body" id="user_detail">
+                        <p>Akun milik <span id="nama_user" style="font-weight:bold;"></span>, dengan kode RFID: <span id="rfid_clm" style="font-weight:bold;"></span></p>
+                        <div class="table table-stripped">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Tanggal Masuk</th>
+                                        <th>Waktu Masuk</th>
+                                        <th>Durasi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="tanggal"></td>
+                                        <td id="waktu"></td>
+                                        <td id="durasi"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </body>
 
 <script type="text/javascript">
@@ -294,6 +292,23 @@ $(document).ready(function(){
             }
         });
     });
+    $(document).on('click', '.tracking', function(){
+        var id_ver = $(this).attr("id");
+        $.ajax({
+            url: "query/tabel_user.php",
+            method: "POST",
+            data: {id_ver:id_ver},
+            dataType: "json",
+            success: function(data){
+                $('#nama_user').val(data.nama_lengkap);
+                $('#rfid_clm').val(data.kode_rfid);
+                $('#tanggal').val(data.tanggal);
+                $('#waktu').val(data.jam);
+                $('#durasi').val(data.durasi);
+                $('#user').modal('show');
+            }
+        });
+    });
     $('#insert_form').on("submit", function(){
         $.ajax({
             url: "query/ubah.php",
@@ -305,22 +320,6 @@ $(document).ready(function(){
             success: function(data){
                 $('edit').modal('hide');
                 $('#tabel_user').html(data);
-            }
-        });
-    });
-    $(document).on('click', '.trc_user', function(){
-        var id_ver = $(this).attr("id");
-        $.ajax({
-            url: "query/tabel_user.php",
-            method: "POST",
-            data: {id_ver:id_ver},
-            dataType: "json",
-            success: function(data){
-                $('#user').val(data.nama_lengkap);
-                $('#rfid').val(data.kode_rfid);
-                $('#masuk').val(data.waktu_masuk);
-                $('#durasi').val(data.durasi);
-                $('#track').modal('show');
             }
         });
     });
