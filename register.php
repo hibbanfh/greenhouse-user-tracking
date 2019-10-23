@@ -130,7 +130,7 @@ $kuota = $db->query("SELECT r.kode_rfid, r.status_kartu, COUNT(m.kode_rfid) AS k
                     <tbody>
                         <?php while($row = $query->fetch_assoc()) {?>
                         <tr>
-                            <td><button type="button" data-toggle="modal" data-target="#user" name="user" id="<?php echo $row['id']; ?>" class="btn btn-labeled btn-link btn-sm tracking"><?php echo $row['nama_lengkap']; ?></button></td>
+                            <td><input type="button" id="<?php echo $row['id']; ?>" class="btn btn-link btn-sm" name="detail" value="<?php echo $row['nama_lengkap']; ?>" /></td>
                             <td><?php echo $row['kode_rfid']; ?></td>
                             <td><?php echo $row['waktu_pemberian']; ?></td>
                             <td><?php if($row['waktu_penghentian'] == NULL): 
@@ -248,22 +248,9 @@ $kuota = $db->query("SELECT r.kode_rfid, r.status_kartu, COUNT(m.kode_rfid) AS k
                     </div>
                     <div class="modal-body" id="user_detail">
                         <p>Akun milik <span id="nama_user" style="font-weight:bold;"></span>, dengan kode RFID: <span id="rfid_clm" style="font-weight:bold;"></span></p>
-                        <div class="table table-stripped">
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Tanggal Masuk</th>
-                                        <th>Waktu Masuk</th>
-                                        <th>Durasi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td id="tanggal"></td>
-                                        <td id="waktu"></td>
-                                        <td id="durasi"></td>
-                                    </tr>
-                                </tbody>
+                        <div class="table table-responsive">
+                            <table class="table table-stripped table-sm">
+                                
                             </table>
                         </div>
                     </div>
@@ -300,10 +287,8 @@ $(document).ready(function(){
             data: {id_ver:id_ver},
             dataType: "json",
             success: function(data){
-                $('#nama_user').val(data.nama_lengkap);
-                $('#rfid_clm').val(data.kode_rfid);
                 $('#tanggal').val(data.tanggal);
-                $('#waktu').val(data.jam);
+                $('#jam').val(data.jam);
                 $('#durasi').val(data.durasi);
                 $('#user').modal('show');
             }
