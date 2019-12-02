@@ -16,7 +16,7 @@ require "config.php";
 </head>
 
 <body class="bg-light">
-<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
     <a href="#" class="navbar-brand">Monitoring User</a>
     <ul class="navbar-nav w-100">
         <li class="nav-item"><a href="index.php" class="nav-link">Beranda</a></li>
@@ -29,8 +29,9 @@ require "config.php";
 
 <div class="container mt-5">
     <div class="row">
-        <?php if(isset($_GET['error'])) {?>
-        <div class="col-md-12">
+        <?php /* Notifikasi Error */
+        if(isset($_GET['error'])) {?>
+        <div class="col-md-5" style="margin:auto;">
             <div class="alert alert-danger alert-dismissable show fade" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -39,23 +40,26 @@ require "config.php";
             </div>
         </div>
         <?php }?>
-        <div class="col-md-6">    
-            <form action="query/cek_login.php" method="post">
+    </div>
+    <div class="row">
+        <h5 style="margin:auto;padding-top:10px;">Log in Admin</h5>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="margin:auto;">    
+            <form action="query/cek_login.php" method="post" style="margin-top:50px;">
                 <div class="form-group">
-                    <label for="username">Username</label>
                     <input class="form-control" type="text" name="username" placeholder="Username"/>
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
                     <input class="form-control" type="password" name="password" placeholder="Password"/>
                 </div>
                 <div class="col-md-4">
-                <input type="submit" class="btn btn-success btn-block" name="login" value="Masuk">    
+                <input type="submit" class="btn btn-success btn-block" name="login" value="log in">    
                 </div>
             </form>
         </div>
-        </div>
+    </div>
     </div>
 </div>
 

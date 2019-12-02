@@ -28,109 +28,46 @@ $kuota = $db->query("SELECT r.kode_rfid, r.status_kartu, COUNT(m.kode_rfid) AS k
 </head>
 
 <body class="bg-light">
-<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
-        <a href="#" class="navbar-brand">Monitoring User</a>
-        <ul class="navbar-nav w-100">
-            <li class="nav-item"><a href="index_admin.php" class="nav-link">Beranda</a></li>
-            <li class="nav-item"><a href="register.php" class="nav-link">Kelola Akun</a></li>
-            <li class="nav-item"><a href="#" class="nav-link">Perihal</a></li>
-        </ul>
-        <ul class="navbar-nav w-100 justify-content-end">-
-            <li class="nav-item justify-content-end mr-5"><a href="logout.php" class="nav-link">Keluar</a></li>
-        </ul>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+    <a href="#" class="navbar-brand">Monitoring User</a>
+    <ul class="navbar-nav w-100 mr-auto">
+        <li class="nav-item"><a href="index_admin.php" class="nav-link">Beranda</a></li>
+        <li class="nav-item"><a href="register.php" class="nav-link">Kelola Akun</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Perihal</a></li>
+    </ul>
+    <ul class="navbar-nav w-100 justify-content-end">
+        <li class="nav-item justify-content-end mr-5"><a href="logout.php" class="nav-link">Keluar</a></li>
+    </ul>
 </nav>
 
 <div class="container mt-2">
     <?php include 'pesan.php'; ?>
 
     <div class="row">
-        <div class="col-md-6">
-            <section><h4 style="margin: 30px 0 30px 0;">Kelola Akun Pengguna Rumah Kaca</h4></section>
+        <div class="col-md-5">
+            <section><h4 style="margin: 30px 0 30px 0;font-family: 'Roboto', sans-serif;">Kelola Akun Pengguna Rumah Kaca</h4></section>
         </div>
-        <div class="col-md-3">
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#Regis" style="margin: 30px 0 30px 0;">Tambah User</button>
-            <div class="modal fade" id="Regis">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Form User Baru</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>    
-
-                        <div class="modal-body">
-                            <form action="../tambah.php" method="POST">
-                                <div class="form-group">
-                                    <label for="rfid">Kode RFID</label>
-                                    <select name="rfid" class="form-control" placeholder="Kode Kartu RFID">
-                                        <option disabled="disabled" selected="selected">Kode Kartu RFID</option>
-                                        <?php while($kode = $_rfid->fetch_assoc()){ ?>
-                                        <option><?php echo $kode['kode_rfid']; ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nama_lengkap">Nama Lengkap</label>
-                                    <input type="text" name="nama_lengkap" class="form-control" placeholder="Nama Lengkap Anda">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" name="email" class="form-control" placeholder="Email Anda">
-                                </div>
-                                <div class="form-group">
-                                    <label for="nomor_hp">Nomor Handphone</label>
-                                    <input type="text" name="nomor_hp" class="form-control" placeholder="Nomor HP Anda">
-                                </div>
-
-                                <input type="submit" class="btn btn-success btn-block" name="register" value="Daftar">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> 
-        
-        <div class="col-md-3">
-            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#rfid" style="margin: 30px 0 30px 0;">Tambah Kartu RFID</button>
-                <div class="modal fade" id="rfid">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Form Kartu RFID Baru</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>    
-
-                            <div class="modal-body">
-                                <form action="#" method="POST">
-                                    <div class="form-group">
-                                        <label for="nomor_rfid">Nomor Kartu RFID</label>
-                                        <input type="text" name="nomor_rfid" class="form-control" placeholder="Nomor Kartu RFID Anda">
-                                    </div>
-                                    <input type="submit" class="btn btn-success btn-block" name="tambah" value="Daftar">
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
+        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#Regis" style="margin: 30px 30px 30px 0px;">Tambah User</button>
+        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#rfid" style="margin: 30px 0px 30px 0;">Tambah Kartu RFID</button>   
     </div>
 
     <div class="row">
         <div class="col-md-8">
             <div class="table table-stripped table-responsive-sm">
-                <table class="table table-hover table-sm">
+                <table class="table table-hover table-sm table-responsive">
                     <thead>
                         <tr>
-                            <th>Nama User</th>
-                            <th>Kode RFID</th>
-                            <th>Waktu Pemberian</th>
-                            <th>Waktu Pemberhentian</th>
-                            <th>Status</th>
+                            <th class="p-2" scope="col">Nama User</th>
+                            <th class="p-2" scope="col">Kode RFID</th>
+                            <th class="p-2" scope="col">Waktu Pemberian</th>
+                            <th class="p-2" scope="col">Waktu Pemberhentian</th>
+                            <th class="p-2" scope="col">Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php while($row = $query->fetch_assoc()) {?>
                         <tr>
-                            <td><input type="button" id="<?php echo $row['id']; ?>" class="btn btn-link btn-sm" name="detail" value="<?php echo $row['nama_lengkap']; ?>" /></td>
+                            <td><input type="button" name="user_detail" id="<?php echo $row['id']; ?>" value="<?php echo $row['nama_lengkap']; ?>" class="btn btn-link btn-sm user_detail" /></td>
                             <td><?php echo $row['kode_rfid']; ?></td>
                             <td><?php echo $row['waktu_pemberian']; ?></td>
                             <td><?php if($row['waktu_penghentian'] == NULL): 
@@ -197,67 +134,11 @@ $kuota = $db->query("SELECT r.kode_rfid, r.status_kartu, COUNT(m.kode_rfid) AS k
         </div>
     </div>
     
-    <div class="col-md-3">
-        <div class="modal fade" id="edit">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Ubah Status User</h3>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-
-                    <div class="modal-body">
-                        <form id="insert_form" action="query/ubah.php" method="POST">
-                            <div class="form-group">
-                                Apa anda yakin akan mengubah status dari user di bawah?
-                            </div>
-                            <div class="form-group">
-                                <label for="nama">Nama User</label>
-                                <input disabled type="text" name="nama" id="nama" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="kode">Kode RFID</label>
-                                <input disabled type="text" name="kode" id="kode" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="stat">Status User</label>
-                                <select name="stat" id="stat" placeholder="status" class="form-control">
-                                    <option value="1">Aktif</option>
-                                    <option value="2">Pending</option>
-                                    <option value="0">Tidak Aktif</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" name="id_ver" id="id_ver">
-                            </div>
-                            <input type="submit" class="btn btn-success btn-block" name="insert" id="insert" value="Submit">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <?php include 'modal/ubah_status.php'; ?>
+    <?php include 'modal/kelola_akun.php'; ?>
+    <?php include 'modal/kartu_baru.php'; ?>
+    <?php include 'modal/modal_user.php'; ?>
 </div>
-    <div class="col-md-3">
-        <div class="modal modal-fade" id="user">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Rekord Data User</h3>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body" id="user_detail">
-                        <p>Akun milik <span id="nama_user" style="font-weight:bold;"></span>, dengan kode RFID: <span id="rfid_clm" style="font-weight:bold;"></span></p>
-                        <div class="table table-responsive">
-                            <table class="table table-stripped table-sm">
-                                
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 
 <script type="text/javascript">
@@ -279,20 +160,20 @@ $(document).ready(function(){
             }
         });
     });
-    $(document).on('click', '.tracking', function(){
-        var id_ver = $(this).attr("id");
-        $.ajax({
-            url: "query/tabel_user.php",
-            method: "POST",
-            data: {id_ver:id_ver},
-            dataType: "json",
-            success: function(data){
-                $('#tanggal').val(data.tanggal);
-                $('#jam').val(data.jam);
-                $('#durasi').val(data.durasi);
-                $('#user').modal('show');
-            }
-        });
+    $(document).on('click', '.user_detail', function(){
+        var user_id = $(this).attr("id");
+        if(user_id != '')
+        {
+            $.ajax({
+                url: "query/user_detail.php",
+                method: "POST",
+                data: {user_id:user_id},
+                success: function(data){
+                    $('#acc_detail').html(data);
+                    $('#detail').modal('show');
+                } 
+            });
+        }
     });
     $('#insert_form').on("submit", function(){
         $.ajax({

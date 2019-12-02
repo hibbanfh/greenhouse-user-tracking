@@ -39,7 +39,7 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
 
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
         <a href="#" class="navbar-brand">Monitoring User</a>
         <ul class="navbar-nav w-100">
             <li class="nav-item"><a href="index.php" class="nav-link">Beranda</a></li>
@@ -52,11 +52,15 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
 
     <div class="container-fluid">
         <?php include 'pesan.php'; ?>
-        </*?php include 'limit.php'; ?>
+        <div class="row">
+            <div class="col-md-7">
+                <h2 style="margin: 20px 0px 5px 30px; font-family: 'Roboto', sans-serif;"><b>Informasi Aktifitas User Rumah Kaca</b></h2>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-3">
-                <div class="input-append date">
-                    <input id="datepicker" size="16" type="text" readonly>
+                <div class="input-append date" style="margin: 20px 0px 20px 30px;">
+                    <input id="datepicker" size="16" type="text" placeholder="yyyy/mm/dd" readonly>
                     <span class="add-on"><i class="icon-calendar"></i></span>
                     <button type="button" id="sort" name="sort" class="btn btn-success btn-sm"><span class="btn-label"><i class="icon-search"></i></span></button>
                     <button type="button" id="clear" name="clear" class="btn btn-danger btn-sm"><span class="btn-label"><i class="icon-refresh"></i></span></button>
@@ -66,14 +70,14 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
         
         <div class="row">
             <div id="tbl_utama" class="col-md-7">
-                <table class="table table-stripped table-hover maintabel" style="margin-left:30px;"> 
+                <table class="table table-stripped table-sm table-hover maintabel" style="margin-left:30px;"> 
                     <thead>
-                    <tr>
-                        <th scope="col">User</th>   
-                        <th scope="col">Waktu Masuk</th>
-                        <th scope="col">Waktu Keluar</th>
-                        <th scope="col">Durasi Aktifitas</th>
-                    </tr>
+                        <tr>
+                            <th class="p-3" scope="col">User</th>   
+                            <th class="p-3" scope="col">Waktu Masuk</th>
+                            <th class="p-3" scope="col">Waktu Keluar</th>
+                            <th class="p-3" scope="col">Durasi Aktifitas</th>
+                        </tr>
                     </thead>
                     
                     <tbody id="tbl_isi">
@@ -89,7 +93,7 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
                             elseif ($row['tanggal_masuk'] == date('Y-m-d', time() - 86400)):
                                 echo "Kemarin";
                             else:
-                                echo date('D, d M Y', strtotime($row['tanggal_masuk']));
+                                echo date('l, d F Y', strtotime($row['tanggal_masuk']));
                             endif;
                             ?></b></td>
                         </tr>
@@ -114,9 +118,10 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
                     </tbody>    
                 </table>
             </div>
+
             <div class="col-md-4">
-                <div class="card">
-                    <p style="margin-top:10px;">Rekap Data</p>
+                <div class="card" style="margin-left:30px;">
+                    <p class="p-3" style="margin:auto;">Rekap Data</p>
                     <div id="accordion">
                         <div class="card">
                             <div class="card-header">
@@ -126,11 +131,11 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
                                 <div class="card-body">
                                     <table class="table table-stripped table-sm">
                                         <thead>
-                                        <tr>
-                                            <th>User</th>
-                                            <th>Waktu Masuk</th>
-                                            <th>Waktu Keluar</th>
-                                        </tr>
+                                            <tr>
+                                                <th>User</th>
+                                                <th>Waktu Masuk</th>
+                                                <th>Waktu Keluar</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
                                         <?php while($k = $kemarin->fetch_assoc()) {?>
@@ -178,9 +183,8 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
                     </div>
                 </div>
             </div>
-        <?php include "pagination.php"; ?>
         </div>
-        
+        <?php include "pagination.php"; ?>
     </div>
     <?php include "footer.php"; ?>
 </body>
@@ -202,11 +206,14 @@ $(document).ready(function(){
     $('#sort').on('click', function(){
         if($('#datepicker').val() == ""){
             alert("Pilih tanggal terlebih dahulu!");
-        } else {
+        } 
+        else 
+        {
             $datepicker = $('#datepicker').val();
             $('#tbl_isi').empty();
-            $loading = $('<tr><td colspan="4"><center>Mencari....</center></td></tr>');
+            $loading = $('<tr><td colspan="4"><center>Mencari...</center></td></tr>');
             $loading.appendTo('#tbl_isi');
+            $('.pagination').remove();
             setTimeout(function(){
                 $loading.remove();
                 $.ajax({
@@ -217,8 +224,8 @@ $(document).ready(function(){
                         $('#tbl_isi').html(res);
                     }
                 });
-            }, 3000);
-        }
+            }, 1000);
+        }3
     });
     $('#clear').on('click', function(){
         location.reload();

@@ -34,11 +34,14 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css"/>    
+    <link rel="stylesheet" type="text/css" href="env.css">
 </head>
 
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
         <a href="#" class="navbar-brand">Monitoring User</a>
         <ul class="navbar-nav w-100">
             <li class="nav-item"><a href="index_admin.php" class="nav-link">Beranda</a></li>
@@ -51,63 +54,75 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
     </nav>
 
     <div class="container-fluid">
-
         <div class="row">
             <div class="col-md-7">
-                <table class="table table-stripped table-hover maintabel" style="margin-left:30px;"> 
+                <h2 style="margin: 20px 0px 5px 30px; font-family: 'Roboto', sans-serif;"><b>Informasi Aktifitas User Rumah Kaca</b></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="input-append date" style="margin: 20px 0px 20px 30px;">
+                    <input id="datepicker" size="16" type="text" placeholder="yyyy/mm/dd" readonly>
+                    <span class="add-on"><i class="icon-calendar"></i></span>
+                    <button type="button" id="sort" name="sort" class="btn btn-success btn-sm"><span class="btn-label"><i class="icon-search"></i></span></button>
+                    <button type="button" id="clear" name="clear" class="btn btn-danger btn-sm"><span class="btn-label"><i class="icon-refresh"></i></span></button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <table class="table table-stripped table-sm table-hover maintabel" style="margin-left:30px;"> 
                     <thead>
-                    <tr>
-                        <th scope="col">User</th>   
-                        <th scope="col">Waktu Masuk</th>
-                        <th scope="col">Waktu Keluar</th>
-                        <th scope="col">Durasi Aktifitas</th>
-                    </tr>
+                        <tr>
+                            <th class="p-3" scope="col">User</th>   
+                            <th class="p-3" scope="col">Waktu Masuk</th>
+                            <th class="p-3" scope="col">Waktu Keluar</th>
+                            <th class="p-3" scope="col">Durasi Aktifitas</th>
+                        </tr>
                     </thead>
 
+                    <tbody id="tbl_isi">
                     <?php
                     if ($hasil-> num_rows > 0){
                         $cur_date = false;
                         while($row = $hasil-> fetch_assoc()) {
                             $row_counter++;
-                            if ($row['tanggal_masuk'] != $cur_date) {
-                    ?>
-                    <tr class="table-dark">
-                        <td colspan='4'><b><?php if ($row['tanggal_masuk'] == date('Y-m-d')):
-                            echo "Hari ini";
-                        elseif ($row['tanggal_masuk'] == date('Y-m-d', time() - 86400)):
-                            echo "Kemarin";
-                        else:
-                            echo $row['tanggal_masuk'];
-                        endif;
-                        ?></b></td>
-                    </tr>
-                    
-                    <?php $cur_date = $row['tanggal_masuk'];
-                        }?>
-                    <tr>
-                        <td><?php echo $row['nama_lengkap'] ?></td>
-                        <td><?php echo $row['masuk'] ?></td>
-                        <td><?php if ($row['waktu_keluar'] === NULL):
-                                echo "User belum keluar";
+                            if ($row['tanggal_masuk'] != $cur_date) { ?>
+                        <tr class="table-dark">
+                            <td colspan='4'><b><?php if ($row['tanggal_masuk'] == date('Y-m-d')):
+                                echo "Hari ini";
+                            elseif ($row['tanggal_masuk'] == date('Y-m-d', time() - 86400)):
+                                echo "Kemarin";
                             else:
-                                echo $row['waktu_keluar'];
-                            endif; ?></td>
-                        <td><?php if ($row['estimasi'] < 0):
-                                echo "User belum Keluar";
-                            else: 
-                                echo $row['estimasi'];
-                            endif; ?></td>
-                    </tr>
-                    
-                    <?php
-                        }
-                    }
-                    ?>
+                                echo date('l, d F Y', strtotime($row['tanggal_masuk']));
+                            endif;
+                            ?></b></td>
+                        </tr>
+                        
+                        <?php $cur_date = $row['tanggal_masuk'];
+                            }?>
+                        <tr>
+                            <td><?php echo $row['nama_lengkap'] ?></td>
+                            <td><?php echo $row['masuk'] ?></td>
+                            <td><?php if ($row['waktu_keluar'] === NULL):
+                                    echo "User belum keluar";
+                                else:
+                                    echo $row['waktu_keluar'];
+                                endif; ?></td>
+                            <td><?php if ($row['estimasi'] < 0):
+                                    echo "User belum Keluar";
+                                else: 
+                                    echo $row['estimasi'];
+                                endif; ?></td>
+                        </tr><?php }
+                        } ?>
+                    </tbody>    
                 </table>
             </div>
+
             <div class="col-md-4">
-                <div class="card">
-                    <p style="margin-top:10px;">Rekap Data</p>
+                <div class="card" style="margin-left:30px;">
+                    <p class="p-3" style="margin:auto;">Rekap Data</p>
                     <div id="accordion">
                         <div class="card">
                             <div class="card-header">
@@ -170,35 +185,52 @@ $lusa = $db->query("SELECT u.nama_lengkap, TIME(l.waktu_masuk) as masuk, TIME(l.
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-3">
-            <ul class="pagination" style="margin-left:30px;">
-                <li class="page-item"><?php if($page > 1): ?>
-                    <a class="page-link" href="?halaman=<?= $page - 1; ?>">Previous</a>
-                <?php endif; ?>
-                </li>
-                <?php for($i=1; $i<=$pages; $i++) :?>
-                <li class="<?php if($i == $page) {echo 'page-item active';} else {echo 'page-item';} ?>">
-                        <a href="?halaman=<?= $i; ?>" class="page-link"><?= $i; ?></a>
-                    <?php endfor;?>  
-                </li>
-                <li class="page-item"><?php if($page < $pages): ?>
-                    <a href="?halaman=<?= $page + 1;?>" class="page-link">Next</a>
-                <?php endif; ?>
-                </li>
-            </ul>
-        </div>
-        
-        
+        <?php include "pagination.php"; ?>
     </div>
-
     <?php include "footer.php"; ?>
 </body>
-    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="//cdn.datatables.net/3.3.7/js/jquery.dataTables.min.js"></script>
-    <script>
-    $(document).ready(function() {
-        $('.maintabel').DataTable();
-    } );
-    </script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdn.datatables.net/3.3.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+<script src="https://maxcdn.boostrapcdn.com/bootstrap/4.3.1/js/boostrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmY1" crossorigin="anonymous"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $(function(){
+        $('#datepicker').datepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        });
+    });
+    //$('#datepicker').datepicker();
+    $('#sort').on('click', function(){
+        if($('#datepicker').val() == ""){
+            alert("Pilih tanggal terlebih dahulu!");
+        } 
+        else 
+        {
+            $datepicker = $('#datepicker').val();
+            $('#tbl_isi').empty();
+            $loading = $('<tr><td colspan="4"><center>Mencari...</center></td></tr>');
+            $loading.appendTo('#tbl_isi');
+            $('.pagination').remove();
+            setTimeout(function(){
+                $loading.remove();
+                $.ajax({
+                    url: "query/sorting.php",
+                    type: "POST",
+                    data: {datepicker:$datepicker},
+                    success: function(res){
+                        $('#tbl_isi').html(res);
+                    }
+                });
+            }, 1000);
+        }
+    });
+    $('#clear').on('click', function(){
+        location.reload();
+    }); 
+});    
+</script>
 </html>
